@@ -1,0 +1,31 @@
+classDiagram
+class SingletonProtocol {
+  <<aspect, abstract>>
+  -instancias: Map~Class, Object~
+  #excepciones()* «@Pointcut»
+  #creacionSingleton() «@Pointcut call((Singleton+).new(..))»
+  +controlarCreacion(jp: ProceedingJoinPoint) Object «@Around»
+}
+class Singleton {
+  <<interface>>
+}
+class SingletonConexionAspect {
+  <<aspect>>
+  -marcador: Singleton «@DeclareParents ConexionBD || Logger»
+  #excepciones() «@Pointcut within(*..*Test)»
+}
+class ConexionBD {
+  -url: String
+  +ConexionBD()
+  +consultar(sql: String) String
+}
+class Logger {
+  +Logger()
+  +log(msg: String) void
+}
+SingletonProtocol ..> Singleton : intercepta
+SingletonConexionAspect --|> SingletonProtocol
+ConexionBD ..|> Singleton : «@DeclareParents»
+Logger ..|> Singleton : «@DeclareParents»
+SingletonConexionAspect ..> ConexionBD : «crosscuts»
+SingletonConexionAspect ..> Logger : «crosscuts»

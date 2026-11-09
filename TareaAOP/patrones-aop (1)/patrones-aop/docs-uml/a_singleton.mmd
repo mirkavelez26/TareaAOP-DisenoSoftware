@@ -1,0 +1,14 @@
+classDiagram
+class ConexionBD {
+  <<final>>
+  -instancia: ConexionBD$
+  -url: String
+  -ConexionBD()
+  +getInstance() ConexionBD$
+  +consultar(sql: String) String
+}
+class MainSingletonOOP {
+  +main(args: String[])$
+}
+ConexionBD --> "0..1" ConexionBD : instancia
+MainSingletonOOP ..> ConexionBD : getInstance()

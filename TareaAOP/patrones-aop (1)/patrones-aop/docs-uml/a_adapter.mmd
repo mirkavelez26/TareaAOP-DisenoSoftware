@@ -1,0 +1,22 @@
+classDiagram
+direction LR
+class MonitorClima {
+  +reportar(sensor: SensorTemperatura) String
+}
+class SensorTemperatura {
+  <<interface>>
+  +getCelsius() double
+}
+class AdaptadorSensor {
+  -sensor: SensorFahrenheit
+  +AdaptadorSensor(sensor: SensorFahrenheit)
+  +getCelsius() double
+}
+class SensorFahrenheit {
+  -lectura: double
+  +SensorFahrenheit(lectura: double)
+  +leerFahrenheit() double
+}
+MonitorClima ..> SensorTemperatura : usa
+AdaptadorSensor ..|> SensorTemperatura
+AdaptadorSensor o--> "1" SensorFahrenheit : adapta

@@ -1,0 +1,24 @@
+classDiagram
+direction LR
+class MonitorClima {
+  +reportar(sensor: SensorTemperatura) String
+}
+class SensorTemperatura {
+  <<interface>>
+  +getCelsius() double
+}
+class SensorFahrenheit {
+  -lectura: double
+  +SensorFahrenheit(lectura: double)
+  +leerFahrenheit() double
+  +getCelsius() double «introducido»
+}
+class AdaptadorSensorAspect {
+  <<aspect>>
+  @DeclareMixin("...SensorFahrenheit")
+  +adaptar(instancia: Object)$ SensorTemperatura
+}
+MonitorClima ..> SensorTemperatura : usa
+SensorFahrenheit ..|> SensorTemperatura : «mixin»
+AdaptadorSensorAspect ..> SensorFahrenheit : «crosscuts / introduce»
+AdaptadorSensorAspect ..> SensorTemperatura : crea delegado

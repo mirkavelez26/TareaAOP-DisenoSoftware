@@ -1,0 +1,16 @@
+sequenceDiagram
+participant M as MainAdapterAOP
+participant C as MonitorClima
+participant S as SensorFahrenheit<br/>(tejido por AdaptadorSensorAspect)
+participant D as delegado : SensorTemperatura<br/>(creado por adaptar())
+M->>S: new SensorFahrenheit(98.6)
+M->>M: (SensorTemperatura) sensor  [mismo objeto]
+M->>C: reportar(sensor)
+C->>S: getCelsius()
+Note right of S: Método introducido por @DeclareMixin
+S->>D: getCelsius()  [delegación tejida]
+D->>S: leerFahrenheit()
+S-->>D: 98.6
+D-->>S: 37.0
+S-->>C: 37.0
+C-->>M: "Temperatura actual: 37.00 °C"

@@ -1,0 +1,17 @@
+sequenceDiagram
+participant M as MainSingletonAOP
+participant A as SingletonConexionAspect<br/>(@Around controlarCreacion)
+participant Map as instancias : Map
+participant K as ConexionBD
+M->>A: new ConexionBD()  [interceptado]
+A->>Map: get(ConexionBD.class)
+Map-->>A: null
+A->>K: jp.proceed()  → ejecuta el constructor
+K-->>A: c1 : ConexionBD
+A->>Map: put(ConexionBD.class, c1 : ConexionBD)
+A-->>M: c1 : ConexionBD
+M->>A: new ConexionBD()  [interceptado]
+A->>Map: get(ConexionBD.class)
+Map-->>A: c1 : ConexionBD
+Note over A,K: No se llama a jp.proceed(): el constructor NO se ejecuta
+A-->>M: c1 : ConexionBD (misma instancia)
